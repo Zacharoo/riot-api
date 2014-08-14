@@ -1,0 +1,44 @@
+#!/bin/python
+
+Game Table
+# gameID
+# game mode
+# game type
+# id into game_association_stats  -- lists all ten player's performance
+# createDate (long, in epoch miliseconds)
+
+Game Association Stats Table
+# id
+# player0 gameStat id
+# player1 gameStat id
+# player2 gameStat id
+# player3 gameStat id
+# player4 gameStat id
+# player5 gameStat id
+# player6 gameStat id
+# player7 gameStat id
+# player8 gameStat id
+# player9 gameStat id
+
+
+Game Stats Table
+# id
+# summonerName
+# Champion Used
+# item0
+# item1
+# item2
+# item3
+# item4
+# item5
+# item6
+# spell1
+# spell2
+# blue?
+
+#Game results for the person we 
+#
+#- list of 10 players
+#- gameMode - CLASSIC, ODIN, ARAM, TUTORIAL, ONEFORALL, FIRSTBLOOD
+#- gameType - CUSTOM_GAME, MATCHED_GAME, TUTORIAL_GAME
+#- level
