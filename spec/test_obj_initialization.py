@@ -62,6 +62,43 @@ class TestObjectInitialization(unittest.TestCase):
         session.close()
         assert expected is observed, 'Observed:\t{0}\nExpected:\t{1}'.format(observed, expected)
 
+    def test_when_summoner_is_made(self):
+        session = SessionMaker()
+        def add_a_summoner():
+            summoner = Summoner()
+            session.add(summoner)
+            session.commit()
+            return summoner
+
+        def query_for_summoner():
+            return session.query(Summoner).first()
+
+        expected = add_a_summoner()
+        observed = query_for_summoner()
+        session.close()
+        assert expected is observed, 'Observed:\t{0}\nExpected:\t{1}'.format(observed, expected)
+
+
+    def test_when_summoner_name_is_made(self):
+        session = SessionMaker()
+        def add_a_summoner_name():
+            summoner_name = SummonerName(name='seven_nation_gnarmy', region='na')
+            session.add(summoner_name)
+            session.commit()
+            return summoner_name
+
+        def query_for_summoner_name():
+            return session.query(SummonerName).first()
+
+        expected = add_a_summoner_name()
+        observed = query_for_summoner_name()
+        session.close()
+        assert expected is observed, 'Observed:\t{0}\nExpected:\t{1}'.format(observed, expected)
+
+    def test_when_they_work_together(self):
+        pass    
+
+
 if __name__ == '__main__':
     unittest.main()
 
