@@ -5,12 +5,10 @@ from sqlalchemy import create_engine, MetaData
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import sessionmaker, relationship, backref
 
-
 Base = declarative_base()
 engine = create_engine('sqlite:///:memory:')
 SessionMaker = sessionmaker(bind=engine)
 meta_data = MetaData()
-
 
 class Game(Base):
     __tablename__ = 'game'
@@ -21,7 +19,7 @@ class Game(Base):
     game_id             = Column(Integer)
     create_date         = Column(DateTime)
 
-    game_stats = relationship('GameStats', backref='game')
+    game_stats          = relationship('GameStats', backref='game')
 
 class GameStats(Base):
     __tablename__ = 'game_stats'
@@ -46,7 +44,7 @@ class GameStats(Base):
 class Summoner(Base):
     __tablename__ = 'summoner'
     id = Column(Integer, primary_key=True)
-    summoner_names = relationship('summoner_name')
+    summoner_names = relationship('SummonerName')
 
 
 class SummonerName(Base):
@@ -54,7 +52,7 @@ class SummonerName(Base):
     name = Column(String, primary_key=True)
     id = Column(Integer, ForeignKey('summoner.id'))
     region = Column(String)
-    games = relationship('GameStats.id')
+    games = relationship('GameStats')
 
 
 def make_tables():

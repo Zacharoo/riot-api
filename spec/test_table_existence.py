@@ -8,27 +8,17 @@ class TestTableExistence(unittest.TestCase):
     def setUpClass(self):
         make_tables()
 
-    def test_game_stats_exists(self):
+    @classmethod
+    def tearDownClass(self):
+        meta_data.drop_all(engine)
+
+    def test_when_all_tables_exist(self):
         assert 'game_stats' in meta_data.tables.keys()
-
-    def test_game_exists(self):
         assert 'game' in meta_data.tables.keys()
-
-    def test_summoner_exists(self):
         assert 'summoner' in meta_data.tables.keys()
-
-    def test_summoner_name_exists(self):
         assert 'summoner_name' in meta_data.tables.keys()
 
-    def test_when_game_has_right_columns(self):
-        insp = inspect(engine)
-        columns = insp.get_columns('game')
-        assert len(columns) == 5, '{0}'.format(len(columns)) 
-        expected = [ 'id', 'game_mode', 'game_type', 'game_id', 'create_date' ]
-        for column in columns:
-            assert column['name'] in expected, 'Couldn\' find the column name found among those expected.\n {0}'.format(column['name'])
-
-    def test_all_tables(self):
+    def test_all_tables_have_rigth_columns(self):
         t = TableTester()
         test = t.has_next_table()
         while test:

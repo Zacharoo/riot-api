@@ -2,22 +2,22 @@
 
 - Build the model lolololol
     - Start with the summoner
-        - Design the model for a summoner.
+        - check! Design the model for a summoner.
         - Build the model for a summoner.
         - Test it    
 
     - Move into the champion model
-        - Design it
+        - check! Design it
         - Build it
         - Test it
 
     - Move into the model for an item
-        - Design it
+        - check! Design it
         - Build it
         - Test it
 
     - Move into the model for a game
-        - Design it
+        - check! Design it
         - Build it
         - Test it
 
