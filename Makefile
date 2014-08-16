@@ -3,6 +3,7 @@
 all:
 
 test:
-	python -m unittest discover 
+	python -m unittest discover -v -s ./spec/
+	
 clean:
-	rm
+

@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker, relationship, backref
 
 
 Base = declarative_base()
-engine = create_engine('sqlite:///:memory:', echo=True)
+engine = create_engine('sqlite:///:memory:')
 SessionMaker = sessionmaker(bind=engine)
 
 class Game(Base):
