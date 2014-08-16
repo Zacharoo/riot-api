@@ -7,7 +7,7 @@ DEV_KEY= '31081cca-7c15-4fbd-b4dc-fd9d5ee9c79e'
 
 def main():
 
-    make_tables()
+#    make_tables()
 
     def test_on_lustboy():
         lustboy = get_summoner_by_name('TSM LUSTBOY')
@@ -23,6 +23,9 @@ def main():
             print(champ['name'])
             print(item0['name'])
             time.sleep(2.5)
+
+    test_on_lustboy()
+
 
     # TODO test get_team_by_id
     def get_team_by_id(identifier):
