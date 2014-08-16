@@ -1,7 +1,7 @@
 #!/bin/python
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, DateTime, Boolean
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, MetaData
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import sessionmaker, relationship, backref
 
@@ -9,6 +9,8 @@ from sqlalchemy.orm import sessionmaker, relationship, backref
 Base = declarative_base()
 engine = create_engine('sqlite:///:memory:')
 SessionMaker = sessionmaker(bind=engine)
+meta_data = MetaData()
+
 
 class Game(Base):
     __tablename__ = 'game'
@@ -17,7 +19,7 @@ class Game(Base):
     game_mode           = Column(String)
     game_type           = Column(String)
     game_id             = Column(Integer)
-    create_data         = Column(DateTime)
+    create_date         = Column(DateTime)
 
     game_stats = relationship('GameStats', backref='game')
 
@@ -57,7 +59,7 @@ class SummonerName(Base):
 
 def make_tables():
     Base.metadata.create_all(engine)
-
+    meta_data.reflect(bind=engine)
 
 if __name__ == '__main__':
     make_tables()
