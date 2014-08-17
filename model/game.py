@@ -5,12 +5,32 @@ from sqlalchemy import create_engine, MetaData
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import sessionmaker, relationship, backref
 
-Base = declarative_base()
-engine = create_engine('sqlite:///:memory:')
-SessionMaker = sessionmaker(bind=engine)
-meta_data = MetaData()
+class Database:
+    def __init__(self):
+        self.Base = declarative_base()
+        self.Engine = create_engine('sqlite:///:memory:')
+        self.SessionMaker = sessionmaker(bind=self.Engine)
+        self.Meta = MetaData()
 
-class Game(Base):
+    def make_tables(self):
+        self.Base.metadata.create_all(self.Engine)
+        self.Meta.reflect(bind=self.Engine)
+
+    def destroy_tables(self):
+        self.Meta.drop_all(self.Engine)
+
+    def truncate_tables(self):
+        conn = self.Engine.connect()
+        trans = conn.begin()
+        for table in self.Meta.sorted_tables:
+            conn.execute(table.delete())
+        trans.commit()
+        conn.close()
+
+
+spider = Database()
+
+class Game(spider.Base):
     __tablename__ = 'game'
 
     id                  = Column(Integer, primary_key=True)
@@ -21,7 +41,7 @@ class Game(Base):
 
     game_stats          = relationship('GameStats', backref='game')
 
-class GameStats(Base):
+class GameStats(spider.Base):
     __tablename__ = 'game_stats'
 
     id              = Column(Integer, primary_key=True)
@@ -41,13 +61,13 @@ class GameStats(Base):
 
     game_id         = Column(Integer, ForeignKey('game.id'))
 
-class Summoner(Base):
+class Summoner(spider.Base):
     __tablename__ = 'summoner'
     id = Column(Integer, primary_key=True)
     summoner_names = relationship('SummonerName')
 
 
-class SummonerName(Base):
+class SummonerName(spider.Base):
     __tablename__ = 'summoner_name'
     name = Column(String, primary_key=True)
     id = Column(Integer, ForeignKey('summoner.id'))
@@ -55,9 +75,6 @@ class SummonerName(Base):
     games = relationship('GameStats')
 
 
-def make_tables():
-    Base.metadata.create_all(engine)
-    meta_data.reflect(bind=engine)
 
 if __name__ == '__main__':
     make_tables()

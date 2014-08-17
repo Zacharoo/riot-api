@@ -7,18 +7,17 @@ class TestObjectInitialization(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):
-        make_tables()
+        spider.make_tables()
 
     @classmethod
     def tearDownClass(self):
-        meta_data.drop_all(engine)
+        spider.destroy_tables()
 
-    def test_thing(self):
-        assert 2*3 == 6
-        s = Summoner()
-
+    def tearDown(self):
+        spider.truncate_tables() 
+    
     def test_when_game_is_made(self):
-        session = SessionMaker()
+        session = spider.SessionMaker()
         def add_a_game():
             game = Game(
                 game_mode   = 'CLASSIC',
@@ -39,7 +38,7 @@ class TestObjectInitialization(unittest.TestCase):
         assert expected is observed, 'Observed:\t{0}\nExpected:\t{1}'.format(observed, expected)
 
     def test_when_game_stats_is_made(self):
-        session = SessionMaker()
+        session = spider.SessionMaker()
         def add_a_game_stats():
             game_stats = GameStats(
                 summoner_name = 'Bjerson',
@@ -63,7 +62,7 @@ class TestObjectInitialization(unittest.TestCase):
         assert expected is observed, 'Observed:\t{0}\nExpected:\t{1}'.format(observed, expected)
 
     def test_when_summoner_is_made(self):
-        session = SessionMaker()
+        session = spider.SessionMaker()
         def add_a_summoner():
             summoner = Summoner()
             session.add(summoner)
@@ -80,7 +79,7 @@ class TestObjectInitialization(unittest.TestCase):
 
 
     def test_when_summoner_name_is_made(self):
-        session = SessionMaker()
+        session = spider.SessionMaker()
         def add_a_summoner_name():
             summoner_name = SummonerName(name='seven_nation_gnarmy', region='na')
             session.add(summoner_name)
