@@ -8,7 +8,7 @@ from sqlalchemy.orm import sessionmaker, relationship, backref
 class Database:
     def __init__(self):
         self.Base = declarative_base()
-        self.Engine = create_engine('sqlite:///:memory:')
+        self.Engine = create_engine('sqlite:///:memory:', echo=True)
         self.SessionMaker = sessionmaker(bind=self.Engine)
         self.Meta = MetaData()
 
@@ -26,7 +26,6 @@ class Database:
             conn.execute(table.delete())
         trans.commit()
         conn.close()
-
 
 spider = Database()
 
@@ -74,6 +73,15 @@ class SummonerName(spider.Base):
     region = Column(String)
     games = relationship('GameStats')
 
+
+spider.make_tables()
+print('The tables were made.')
+def assert_tables_were_made():
+    assert 'game_stats' in spider.Meta.tables.keys()
+    assert 'game' in spider.Meta.tables.keys()
+    assert 'summoner' in spider.Meta.tables.keys()
+    assert 'summoner_name' in spider.Meta.tables.keys()
+assert_tables_were_made()
 
 
 if __name__ == '__main__':

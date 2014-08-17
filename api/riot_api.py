@@ -1,6 +1,8 @@
 #!/bin/python
 import requests
 
+DEV_KEY = '31081cca-7c15-4fbd-b4dc-fd9d5ee9c79e'
+
 def get_item_by_id(identifier):
     base = 'http://na.api.pvp.net/api/lol/static-data/na/v1.2/item/{0}'
     payload = { 'api_key': DEV_KEY }
