@@ -8,7 +8,7 @@ from sqlalchemy.orm import sessionmaker, relationship, backref
 class Database:
     def __init__(self):
         self.Base = declarative_base()
-        self.Engine = create_engine('sqlite:///:memory:', echo=True)
+        self.Engine = create_engine('sqlite:///:memory:', echo=False)
         self.SessionMaker = sessionmaker(bind=self.Engine)
         self.Meta = MetaData()
 

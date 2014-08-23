@@ -1,6 +1,8 @@
 from model.game import *
-import unittest
+from spec.support.support import *
 from sqlalchemy import inspect
+
+import unittest
 import datetime
 
 class TestObjectInitialization(unittest.TestCase):
@@ -18,61 +20,33 @@ class TestObjectInitialization(unittest.TestCase):
     
     def test_when_game_is_made(self):
         session = spider.SessionMaker()
-        def add_a_game():
-            game = Game(
-                game_mode   = 'CLASSIC',
-                game_type   = 'MATCHED_GAME',
-                game_id     = 100100100101,
-                create_date = datetime.datetime.now(),
-            )
-            session.add(game)
-            session.commit()
-            return game
 
-        def query_for_game():
-            return session.query(Game).filter_by(game_id=100100100101).first()
+        def query_for_game(session):
+            return session.query(Game).first()
         
-        expected = add_a_game()
-        observed = query_for_game()
+        expected = add_a_game(session)
+        observed = query_for_game(session)
         session.close()
         assert expected is observed, 'Observed:\t{0}\nExpected:\t{1}'.format(observed, expected)
 
     def test_when_game_stats_is_made(self):
         session = spider.SessionMaker()
-        def add_a_game_stats():
-            game_stats = GameStats(
-                summoner_name = 'Bjerson',
-                champion = 'Garen',
-                spell1 = 'Ignite',
-                spell2 = 'Flash',
-                item0 =  'Bork',
-                blue = True,
-                won = True,
-            )
-            session.add(game_stats)
-            session.commit()
-            return game_stats
 
         def query_for_game_stats():
             return session.query(GameStats).filter_by(summoner_name='Bjerson').first()
 
-        expected = add_a_game_stats()
+        expected = add_game_stats(session)
         observed = query_for_game_stats()
         session.close()
         assert expected is observed, 'Observed:\t{0}\nExpected:\t{1}'.format(observed, expected)
 
     def test_when_summoner_is_made(self):
         session = spider.SessionMaker()
-        def add_a_summoner():
-            summoner = Summoner()
-            session.add(summoner)
-            session.commit()
-            return summoner
 
         def query_for_summoner():
             return session.query(Summoner).first()
 
-        expected = add_a_summoner()
+        expected = add_a_summoner(session)
         observed = query_for_summoner()
         session.close()
         assert expected is observed, 'Observed:\t{0}\nExpected:\t{1}'.format(observed, expected)
@@ -80,16 +54,11 @@ class TestObjectInitialization(unittest.TestCase):
 
     def test_when_summoner_name_is_made(self):
         session = spider.SessionMaker()
-        def add_a_summoner_name():
-            summoner_name = SummonerName(name='seven_nation_gnarmy', region='na')
-            session.add(summoner_name)
-            session.commit()
-            return summoner_name
 
         def query_for_summoner_name():
             return session.query(SummonerName).first()
 
-        expected = add_a_summoner_name()
+        expected = add_a_summoner_name(session)
         observed = query_for_summoner_name()
         session.close()
         assert expected is observed, 'Observed:\t{0}\nExpected:\t{1}'.format(observed, expected)
