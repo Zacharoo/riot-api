@@ -8,21 +8,36 @@ def get_item_by_id(identifier):
     payload = { 'api_key': DEV_KEY }
     url = base.format(identifier)
     response = requests.get(url, params=payload)
-    return response.json()
+    try:
+        result = response.json()
+    except ValueError:
+        print(response.text)
+    return result
 
 def get_champion_by_id(identifier):
     base = 'https://na.api.pvp.net/api/lol/na/v1.2/champion/{0}'
     payload = { 'api_key': DEV_KEY }
     url = base.format(identifier)
     response = requests.get(url, params=payload)
-    return response.json()
+
+    try:
+        result = response.json()
+    except ValueError:
+        print(response.text)
+    return result
+
 
 def get_static_about_champion(champion_id):
     base = 'https://na.api.pvp.net/api/lol/static-data/na/v1.2/champion/{}'
     payload = { 'api_key': DEV_KEY }
     url = base.format(champion_id)
     response = requests.get(url, params=payload)
-    return response.json()
+    try:
+        result = response.json()
+    except ValueError:
+        print(response.text)
+    return result
+
 
 def get_games_by_summoner(summoner):
     base = 'https://na.api.pvp.net/api/lol/na/v1.3/game/by-summoner/{0}/recent'
@@ -37,10 +52,17 @@ def get_summoner_by_name(name):
     payload = { 'api_key': DEV_KEY }
     url = base.format(name)
     response = requests.get(url, params=payload)
-    player = response.json()
-    for key in player:
-        result = player[key]
-        break
+    player = None
+    result = None
+    try:
+        player = response.json()
+    except ValueError:
+        print(response.text)
+
+    if player:
+        for key in player:
+            result = player[key]
+            break
     return result
 
 if __name__ == '__main__':

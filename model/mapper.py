@@ -8,27 +8,26 @@ def fetch_summoner(name):
     time.sleep(1)
     games = get_games_by_summoner(summoner)
     time.sleep(1)
-    
+ 
     for game in games:
         print(game)
         champ_id    = get_champion_by_id(game['championId'])['id']
         time.sleep(1)
         champ       = get_static_about_champion(champ_id)
         time.sleep(1)
-        item0       = get_item_by_id(game['stats'].get('item0'))['name']
-        time.sleep(1)
-        item1       = get_item_by_id(game['stats'].get('item1'))['name'] 
-        time.sleep(1)
-        item2       = get_item_by_id(game['stats'].get('item2'))['name']
-        time.sleep(1)
-        item3       = get_item_by_id(game['stats'].get('item3'))['name']
-        time.sleep(1)
-        item4       = get_item_by_id(game['stats'].get('item4'))['name']
-        time.sleep(1)
-        item5       = get_item_by_id(game['stats'].get('item5'))['name']
-        time.sleep(1)
-        item6       = get_item_by_id(game['stats'].get('item6'))['name']
-        time.sleep(1)
+
+
+        items = []
+        for num in range(7):
+            item_num = "item{0}".format(num)
+            item_id = game['stats'].get(item_num)
+            if item_id:
+                item_name = get_item_by_id(item_id)['name']
+                time.sleep(1) 
+                items.append(item_name)
+            else:
+                items.append(None)
+
         champ_name  = champ['name']
         win = game['stats']['win']
         
@@ -39,18 +38,18 @@ def fetch_summoner(name):
             blue = False
 
         summoner_name = name
-        
+ 
         session = spider_den.spider.SessionMaker()
         game_stats = spider_den.GameStats(
             summoner_name = summoner_name,
             champion = champ_name,
-            item0 = item0,
-            item1 = item1,
-            item2 = item2,
-            item3 = item3,
-            item4 = item4,
-            item5 = item5,
-            item6 = item6,
+            item0 = items[0],
+            item1 = items[1],
+            item2 = items[2],
+            item3 = items[3],
+            item4 = items[4],
+            item5 = items[5],
+            item6 = items[6],
             won = win,
             blue = blue,
         )
