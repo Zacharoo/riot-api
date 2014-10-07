@@ -5,12 +5,24 @@ from sqlalchemy import create_engine, MetaData
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import sessionmaker, relationship, backref
 
+# import config TODO actually use this
+import sys
+
 class Database:
     def __init__(self):
         self.Base = declarative_base()
-        self.Engine = create_engine('sqlite:///:memory:', echo=False)
+        self.Engine = self.get_connection()
         self.SessionMaker = sessionmaker(bind=self.Engine)
         self.Meta = MetaData()
+
+    def get_connection(self, echo=False):
+        engine = None
+        if sys.argv[1]:
+            engine = create_engine('sqlite:///.data.sqlite')
+        else:
+            engine = create_engine('sqlite:///:memory:', echo=echo)
+        return engine
+
 
     def make_tables(self):
         self.Base.metadata.create_all(self.Engine)
