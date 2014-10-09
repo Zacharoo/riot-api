@@ -1,4 +1,4 @@
-from model.game import *
+from model.database import Database
 from spec.support.support import *
 from sqlalchemy import inspect
 
@@ -9,17 +9,18 @@ class TestObjectInitialization(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):
-        spider.make_tables()
+        self.db = Database()
+        self.db.make_tables()
 
     @classmethod
     def tearDownClass(self):
-        spider.destroy_tables()
+        self.db.destroy_tables()
 
     def tearDown(self):
-        spider.truncate_tables() 
+        self.db.truncate_tables() 
     
     def test_when_game_is_made(self):
-        session = spider.SessionMaker()
+        session = self.db.SessionMaker()
 
         def query_for_game(session):
             return session.query(Game).first()
@@ -30,7 +31,7 @@ class TestObjectInitialization(unittest.TestCase):
         assert expected is observed, 'Observed:\t{0}\nExpected:\t{1}'.format(observed, expected)
 
     def test_when_game_stats_is_made(self):
-        session = spider.SessionMaker()
+        session = self.db.SessionMaker()
 
         def query_for_game_stats():
             return session.query(GameStats).filter_by(summoner_name='Bjerson').first()
@@ -41,7 +42,7 @@ class TestObjectInitialization(unittest.TestCase):
         assert expected is observed, 'Observed:\t{0}\nExpected:\t{1}'.format(observed, expected)
 
     def test_when_summoner_is_made(self):
-        session = spider.SessionMaker()
+        session = self.db.SessionMaker()
 
         def query_for_summoner():
             return session.query(Summoner).first()
@@ -53,7 +54,7 @@ class TestObjectInitialization(unittest.TestCase):
 
 
     def test_when_summoner_name_is_made(self):
-        session = spider.SessionMaker()
+        session = self.db.SessionMaker()
 
         def query_for_summoner_name():
             return session.query(SummonerName).first()

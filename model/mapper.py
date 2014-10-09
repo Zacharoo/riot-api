@@ -1,5 +1,5 @@
 #!/bin/bash
-import model.game as spider_den
+from model.game import GameStats
 import time
 from api.riot_api import *
 
@@ -35,7 +35,7 @@ def get_blue_from_game(game):
         blue = False
     return blue
 
-def fetch_and_store_summoner(name):
+def fetch_and_store_summoner(name, db):
     summoner = get_summoner_by_name(name)
     time.sleep(1)
     games = get_games_by_summoner(summoner)
@@ -48,8 +48,9 @@ def fetch_and_store_summoner(name):
         blue = get_blue_from_game(game)
         summoner_name = name
  
-        session = spider_den.spider.SessionMaker()
-        game_stats = spider_den.GameStats(
+        session = db.SessionMaker()
+        session.autocommit = True
+        game_stats = GameStats(
             summoner_name = summoner_name,
             champion = champ_name,
             item0 = items[0],
@@ -68,3 +69,9 @@ def fetch_and_store_summoner(name):
 
         session.add(game_stats)
         session.commit()
+        session.close()
+        print(session.query(GameStats, GameStats.champion).all())
+
+    session = db.SessionMaker()
+    print(session.query(GameStats, GameStats.champion).all())
+
