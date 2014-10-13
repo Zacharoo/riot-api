@@ -9,7 +9,8 @@ from model.database import Database
 def main():
 #    fetch_summoner('thesnowmancometh')
     db = Database(mode='PROD', echo=True)
-    db.make_tables()
+    if not db.has_tables():
+        db.make_tables()
     with open('.smurfs.txt') as f:
         for line in f:
             fetch_and_store_summoner(line.strip(), db)
