@@ -1,4 +1,4 @@
-from model.game import *
+from model.database import Database
 import unittest
 from sqlalchemy import inspect
 
@@ -6,37 +6,39 @@ class TestTableExistence(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):
-        spider.make_tables()
+        self.db = Database('TEST')
+        self.db.make_tables()
 
     @classmethod
     def tearDownClass(self):
-        spider.destroy_tables()
+        self.db.destroy_tables()
 
     def tearDown(self):
-        spider.truncate_tables()
+        self.db.truncate_tables()
 
     def test_when_all_tables_exist(self):
-        assert 'game_stats' in spider.Meta.tables.keys()
-        assert 'game' in spider.Meta.tables.keys()
-        assert 'summoner' in spider.Meta.tables.keys()
-        assert 'summoner_name' in spider.Meta.tables.keys()
+        assert 'game_stats' in self.db.Meta.tables.keys()
+        assert 'game' in self.db.Meta.tables.keys()
+        assert 'summoner' in self.db.Meta.tables.keys()
+        assert 'summoner_name' in self.db.Meta.tables.keys()
 
     def test_all_tables_have_rigth_columns(self):
-        t = TableTester()
+        t = TableTester(self.db)
         test = t.has_next_table()
         while test:
             test()
             test = t.has_next_table()
 
 class TableTester:
-    def __init__(self):
+    def __init__(self, db):
+        self.db = db
         self.tables =  [ 'game', 'game_stats', 'summoner' ]
         self.expected = {
             'game':         [ 'id', 'game_mode', 'game_type', 'game_id', 'create_date' ],
             'game_stats':   [ 'id', 'summoner_name', 'champion', 'spell1', 'spell2', 'item0', 'item1', 'item2', 'item3', 'item4', 'item5', 'item6', 'blue', 'won', 'game_id' ],
             'summoner':     [ 'id' ]
         }
-        self.insp = inspect(spider.Engine)
+        self.insp = inspect(self.db.Engine)
         self.x = 0
  
     def has_next_table(self):
