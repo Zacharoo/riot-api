@@ -49,16 +49,5 @@ class SummonerName(base):
     region = Column(String)
     games = relationship('GameStats')
 
-'''
-spider.make_tables()
-print('The tables were made.')
-def assert_tables_were_made():
-    assert 'game_stats' in spider.Meta.tables.keys()
-    assert 'game' in spider.Meta.tables.keys()
-    assert 'summoner' in spider.Meta.tables.keys()
-    assert 'summoner_name' in spider.Meta.tables.keys()
-assert_tables_were_made()
-'''
-
 if __name__ == '__main__':
     make_tables()
