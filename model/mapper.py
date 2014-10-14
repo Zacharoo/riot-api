@@ -65,7 +65,6 @@ def fetch_and_store_summoner(name, db):
         )
         print(game_stats)
         print(game)
-        print('')
 
         session.add(game_stats)
         session.commit()

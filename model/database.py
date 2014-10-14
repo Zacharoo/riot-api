@@ -4,6 +4,8 @@ from sqlalchemy.orm import sessionmaker
 import config
 import game
 
+import sys
+
 class Database:
     def __init__(self, mode='TEST', echo=False):
         self.mode = mode
@@ -12,6 +14,21 @@ class Database:
         print(self.Engine)
         self.SessionMaker = sessionmaker(bind=self.Engine)
         self.Meta = MetaData()
+        self.Meta.reflect(bind=self.Engine)
+        if not self.has_tables():
+            self.make_tables()
+
+    # double check this...
+    def has_tables(self):
+        a = 'game_stats' in self.Meta.tables.keys()
+        b = 'game' in self.Meta.tables.keys()
+        c = 'summoner' in self.Meta.tables.keys()
+        d = 'summoner_name' in self.Meta.tables.keys()
+        if not (a and b and c and d):
+            print('does not have tables already')
+            return False
+        print('has tables already')
+        return True
 
     def get_connection(self, echo=False):
         engine = None
