@@ -1,5 +1,15 @@
 ## TO DO
 
+First, cut the release branch.
+Deploy the released code to the VPS.
+
+Idempotence isn''t happening because we don''t store the Riot Game id anywhere. It''s slated to be stored in the Game table, but I don''t make a new Game object yet. 
+
+First, refactor Fetch_and_store_summoner to use smaller methods.
+Next, start storing the Game objects in the database as well.
+    Maybe consider writing tests for adding game objects and GameStats objects.
+Then, I can start checking for the Riot ID before storing a new object.
+
 - Double check idempotence
 - Get the other tables to persist
 - Deploy
