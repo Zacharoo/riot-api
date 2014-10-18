@@ -7,7 +7,6 @@ from model.mapper import *
 from model.database import Database
 
 def main():
-#    fetch_summoner('thesnowmancometh')
     db = Database(mode='PROD', echo=True)
     if not db.has_tables():
         db.make_tables()
