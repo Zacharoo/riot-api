@@ -3,17 +3,12 @@ from model.game import GameStats
 from api.riot_api import *
 
 def fetch_and_store_summoner(name, db):
-    summoner = get_summoner_by_name(name)
-    games = get_games_by_summoner(summoner)
- 
-    for game in games:
+    def make_game_stats_from_game(game):
         champ_name = get_champ_name_from_game(game)
         items = get_item_names_by_game(game)
         win = get_win_from_game(game) 
         blue = get_blue_from_game(game)
         summoner_name = name
- 
-        session = db.SessionMaker()
 
         game_stats = GameStats(
             summoner_name = summoner_name,
@@ -28,7 +23,16 @@ def fetch_and_store_summoner(name, db):
             won = win,
             blue = blue,
         )
+        return game_stats
+
         
+    summoner = get_summoner_by_name(name)
+    games = get_games_by_summoner(summoner)
+ 
+    for game in games:
+        game_stats = make_game_stats_from_game(game)
+        session = db.SessionMaker()
+               
         """
         # make a new game object
         db_game = Game( 
