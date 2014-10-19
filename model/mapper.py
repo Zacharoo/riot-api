@@ -25,14 +25,18 @@ def fetch_and_store_summoner(name, db):
         )
         return game_stats
 
+    def store_game_stats_in_db(game, session):
+        session.add(game)
+        session.commit()
+        session.close()
+        return game
         
     summoner = get_summoner_by_name(name)
     games = get_games_by_summoner(summoner)
  
     for game in games:
         game_stats = make_game_stats_from_game(game)
-        session = db.SessionMaker()
-               
+        store_game_stats_in_db(game_stats, db.SessionMaker())
         """
         # make a new game object
         db_game = Game( 
@@ -43,13 +47,11 @@ def fetch_and_store_summoner(name, db):
             game_stats = game_stats,
         )
         """
+        session = db.SessionMaker()
         print(game_stats)
         print(game)
-
-        session.add(game_stats)
-        session.commit()
-        session.close()
         print(session.query(GameStats, GameStats.champion).all())
+        session.close()
 
     session = db.SessionMaker()
     print(session.query(GameStats, GameStats.champion).all())
